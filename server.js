@@ -1,8 +1,6 @@
 import http from "node:http";
 import { URL } from "node:url";
 
- HEAD
-
 const HOST = process.env.HOST || "0.0.0.0";
 const PORT = Number(process.env.PORT || 3000);
  (Improve layout and fix responsive design)
