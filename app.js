@@ -1177,16 +1177,12 @@ function openPortfolio() {
             </article>
         `;
     }
+
+    return true;
 }
 
 
-/*
- * "Work" is kept as a separate action because the
- * frontend icon may use data-platform-action="work".
-* It intentionally opens the existing portfolio section.
- */ 
 function openWork() {
-
     return openPortfolio();
 }
 
@@ -1195,12 +1191,30 @@ function openWork() {
    RESTAURANTS
 ======================================================== */
 
-/*
- * Restaurants are currently represented by the
- * businesses API. This keeps the existing backend
- * unchanged while allowing a Restaurants icon to work.
- */
 function openRestaurants() {
+
+    const section =
+        document.getElementById(
+            "restaurants-section"
+        );
+
+    if (section) {
+
+        section.hidden = false;
+
+        section.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+        document.dispatchEvent(
+            new CustomEvent(
+                "asem:restaurants:open"
+            )
+        );
+
+        return true;
+    }
 
     return handleSection(
         "businesses-section",
@@ -1213,19 +1227,6 @@ function openRestaurants() {
    AI
 ======================================================== */
 
-/*
- * The previous initializeAI() function only contained
- * comments, so the AI action had no actual frontend
- * behavior.
- *
- * The function below first looks for a dedicated AI
- * section. It supports both:
- *
- *     #ai
- *     #ai-section
- *
- * If neither exists, it looks for a dedicated AI page.
- */
 function openAI() {
 
     const aiSection =
@@ -1250,10 +1251,7 @@ function openAI() {
         return true;
     }
 
-    /*
-     * If another AI module is installed on the page,
-     * give it an event to initialize/open itself.
-     */
+    
     const aiEvent =
         new CustomEvent(
             "asem:ai:open"
@@ -1263,10 +1261,7 @@ function openAI() {
         aiEvent
     );
 
-    /*
-     * If an AI page exists in the project,
-     * this provides a final navigation fallback.
-     */
+    
     const aiLink =
         document.querySelector(
             'a[href="ai.html"], a[href="./ai.html"]'
@@ -1291,20 +1286,7 @@ function openAI() {
 
 function initializeAI() {
 
-    /*
-     * The AI runtime can listen for this event:
-     *
-     * document.addEventListener(
-     *     "asem:ai:open",
-     *     () => {
-     *         // open AI interface
-     *     }
-     * );
-     *
-     * No external AI service is called here.
-     * This keeps the frontend stable until the
-     * actual AI interface/runtime is connected.
-     */
+
 
     document.addEventListener(
         "asem:ai:open",
@@ -1635,10 +1617,7 @@ function requestGPS() {
 }
 
 
-/*
- * Kept for compatibility.
- * GPS clicks are handled by initializeActionRouter().
- */
+
 function initializeGPS() {
     return true;
 }
@@ -1662,19 +1641,14 @@ const actions = {
             loadBusinesses
         ),
 
-    /*
-     * Restaurant aliases.
-     * Restaurants currently use the businesses backend.
-     */
+
     restaurant: () =>
         openRestaurants(),
 
     restaurants: () =>
         openRestaurants(),
 
-    /*
-     * Product aliases.
-     */
+
     product: () =>
         handleSection(
             "products-section",
@@ -1687,9 +1661,7 @@ const actions = {
             loadProducts
         ),
 
-    /*
-     * Project aliases.
-     */
+
     project: () =>
         handleSection(
             "projects",
@@ -1702,18 +1674,14 @@ const actions = {
             loadProjects
         ),
 
-    /*
-     * Work / Portfolio aliases.
-     */
+
     work: () =>
         openWork(),
 
     portfolio: () =>
         openPortfolio(),
 
-    /*
-     * AI aliases.
-     */
+
     ai: () =>
         openAI(),
 
@@ -2521,7 +2489,9 @@ const I18N = {
     }
 };
 
-
+/* ========================================================
+   LANGUAGE FUNCTIONS
+======================================================== */
 function detectLanguage() {
 
     const language =
@@ -2850,10 +2820,7 @@ function initializeActionRouter() {
                 return;
             }
 
-            /*
-             * Normalize action names so small differences
-             * in the HTML do not break the buttons.
-             */
+
             action =
                 String(action)
                     .trim()
