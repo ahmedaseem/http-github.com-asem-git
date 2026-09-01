@@ -124,5 +124,8 @@
       input.disabled = false;
       input.focus();
     }
-  });
-})();
+  } else {
+
+    initialize();
+
+}

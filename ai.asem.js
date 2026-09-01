@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+"use strict";
+
+import { CONFIG } from "./config.js";
+
+const API_BASE =
+    CONFIG?.api?.real || "";
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
@@ -653,7 +658,10 @@
 
     }
 
-  </script>
+  } else {
 
-</body>
-</html>
+    initialize();
+
+}
+
+
